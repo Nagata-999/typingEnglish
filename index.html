@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>IELTS Typing Quest</title>
+<style>
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at top, #1c2d5a 0%, #0d1326 45%, #070b16 100%);
+    color: #f4f7ff;
+    min-height: 100vh;
+    padding: 24px;
+  }
+
+  .game-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .title-box {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .title-box h1 {
+    margin: 0;
+    font-size: 42px;
+    letter-spacing: 2px;
+    color: #8be9fd;
+    text-shadow: 0 0 12px rgba(139, 233, 253, 0.45);
+  }
+
+  .title-box p {
+    margin: 8px 0 0;
+    color: #cbd6ff;
+    font-size: 16px;
+  }
+
+  .hud {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .panel {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(8px);
+  }
+
+  .panel-label {
+    font-size: 13px;
+    color: #b7c6ff;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .panel-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #ffffff;
+  }
+
+  .progress-panel {
+    margin-bottom: 18px;
+  }
+
+  .progress-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #dbe4ff;
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #00f5a0, #00d9f5, #7c4dff);
+    border-radius: 999px;
+    transition: width 0.08s linear;
+    box-shadow: 0 0 16px rgba(0, 245, 160, 0.4);
+  }
+
+  .main-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 22px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(10px);
+  }
+
+  .section-title {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #ffd166;
+    font-weight: bold;
+  }
+
+  #target {
+    white-space: pre-wrap;
+    line-height: 1.95;
+    background: rgba(5, 10, 20, 0.55);
+    border-radius: 16px;
+    padding: 24px;
+    min-height: 320px;
+    margin-bottom: 16px;
+    font-size: 22px;
+    border: 1px solid rgba(255,255,255,0.08);
+    cursor: text;
+    user-select: none;
+  }
+
+  .char {
+    color: rgba(255,255,255,0.32);
+    transition: color 0.05s ease, background 0.05s ease, text-shadow 0.05s ease;
+    border-radius: 4px;
+  }
+
+  .char.done {
+    color: #7CFFB2;
+    text-shadow: 0 0 8px rgba(124, 255, 178, 0.3);
+  }
+
+  .char.current {
+    color: #ffffff;
+    background: rgba(255, 209, 102, 0.25);
+    box-shadow: 0 0 0 1px rgba(255, 209, 102, 0.35);
+  }
+
+  .char.error {
+    color: #ff7b91;
+    background: rgba(255, 107, 129, 0.18);
+    box-shadow: 0 0 0 1px rgba(255, 107, 129, 0.35);
+  }
+
+  .buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  button {
+    border: none;
+    border-radius: 999px;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.12s ease, opacity 0.12s ease;
+  }
+
+  button:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+  }
+
+  .btn-main {
+    background: linear-gradient(90deg, #00d9f5, #7c4dff);
+    color: white;
+  }
+
+  .btn-sub {
+    background: rgba(255,255,255,0.12);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+
+  #result {
+    margin-top: 18px;
+    min-height: 40px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #ffe082;
+    text-align: center;
+  }
+
+  #hiddenInput {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .hint {
+    color: #9eb0df;
+    font-size: 14px;
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  .shake {
+    animation: shake 0.18s linear;
+  }
+
+  .clear {
+    animation: pop 0.55s ease;
+  }
+
+  @keyframes pop {
+    0% { transform: scale(0.985); opacity: 0.7; }
+    50% { transform: scale(1.015); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes shake {
+    0% { transform: translateX(0px); }
+    25% { transform: translateX(-3px); }
+    50% { transform: translateX(3px); }
+    75% { transform: translateX(-2px); }
+    100% { transform: translateX(0px); }
+  }
+
+  @media (max-width: 768px) {
+    .hud {
+      grid-template-columns: 1fr;
+    }
+
+    .title-box h1 {
+      font-size: 30px;
+    }
+
+    #target {
+      font-size: 18px;
+      min-height: 260px;
+      padding: 18px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="game-wrap">
+    <div class="title-box">
+      <h1>IELTS TYPING QUEST</h1>
+      <p>Type the template. Watch the passage turn green.</p>
+    </div>
+
+    <div class="hud">
+      <div class="panel">
+        <div class="panel-label">Time</div>
+        <div class="panel-value"><span id="time">0.00</span>s</div>
+      </div>
+      <div class="panel">
+        <div class="panel-label">Accuracy</div>
+        <div class="panel-value"><span id="accuracy">100.00</span>%</div>
+      </div>
+      <div class="panel">
+        <div class="panel-label">Progress</div>
+        <div class="panel-value"><span id="progressText">0</span>%</div>
+      </div>
+    </div>
+
+    <div class="panel progress-panel">
+      <div class="progress-top">
+        <span>Template Progress</span>
+        <span><span id="typedCount">0</span> / <span id="totalCount">0</span> chars</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <div class="main-card" id="mainCard">
+      <div class="section-title">Target Passage</div>
+      <div id="target" tabindex="0" aria-label="Typing target"></div>
+      <textarea id="hiddenInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+
+      <div class="buttons">
+        <button class="btn-main" id="focusBtn">Start / Focus</button>
+        <button class="btn-sub" id="resetBtn">Reset Run</button>
+      </div>
+
+      <div class="hint">Click the passage or press Start, then type.</div>
+      <div id="result"></div>
+    </div>
+  </div>
+
+<script>
+const text = `The importance of social media which was always debatable has now become more controversial, with many people claiming that it is beneficial while others reject this notion. The substantial influence of this trend has sparked controversy over its potential impact in recent years. In my opinion, the former proposition appears to be more rational. This essay will further elaborate my views in favor of the positive impact and thus, will lead to a logical conclusion.
+
+Analyzing the statement and explaining further, the first and foremost reason behind this is that social media enables people to communicate instantly across long distances. Another striking benefit in this regard is that it provides quick access to a wide range of information and news. Categorically discussing, it cannot be ignored that the main reason behind this is that it connects people and spreads information more efficiently than traditional methods.
+
+Probing ahead, one of the main underlying reasons stems from the fact that social media can lead to excessive use and addiction among users. Moving further, it is pertinent to mention that it sometimes spreads misinformation that can negatively affect society. Moreover, people may experience mental stress due to constant comparison with others online. Apart from the reasons mentioned above, it can be clearly stated why many are against this trend.`;
+
+const targetDiv = document.getElementById("target");
+const hiddenInput = document.getElementById("hiddenInput");
+const result = document.getElementById("result");
+const timeEl = document.getElementById("time");
+const accuracyEl = document.getElementById("accuracy");
+const progressText = document.getElementById("progressText");
+const typedCount = document.getElementById("typedCount");
+const totalCount = document.getElementById("totalCount");
+const progressFill = document.getElementById("progressFill");
+const resetBtn = document.getElementById("resetBtn");
+const focusBtn = document.getElementById("focusBtn");
+const mainCard = document.getElementById("mainCard");
+
+totalCount.textContent = text.length;
+
+let startTime = null;
+let timerInterval = null;
+let finished = false;
+let totalKeyStrokes = 0;
+let correctKeyStrokes = 0;
+let lastInputLength = 0;
+let audioCtx = null;
+
+function initAudio() {
+  if (!audioCtx) {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (AudioContextClass) {
+      audioCtx = new AudioContextClass();
+    }
+  }
+  if (audioCtx && audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+}
+
+function playTypeSound() {
+  if (!audioCtx) return;
+
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  const filter = audioCtx.createBiquadFilter();
+
+  osc.type = "square";
+  osc.frequency.setValueAtTime(900 + Math.random() * 120, now);
+
+  filter.type = "lowpass";
+  filter.frequency.setValueAtTime(2200, now);
+
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.exponentialRampToValueAtTime(0.025, now + 0.003);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
+
+  osc.connect(filter);
+  filter.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc.start(now);
+  osc.stop(now + 0.04);
+}
+
+function playErrorSound() {
+  if (!audioCtx) return;
+
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+
+  osc.type = "sawtooth";
+  osc.frequency.setValueAtTime(220, now);
+  osc.frequency.exponentialRampToValueAtTime(180, now + 0.07);
+
+  gain.gain.setValueAtTime(0.0001, now);
+  gain.gain.exponentialRampToValueAtTime(0.03, now + 0.005);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc.start(now);
+  osc.stop(now + 0.085);
+}
+
+function playClearSound() {
+  if (!audioCtx) return;
+
+  const notes = [523.25, 659.25, 783.99];
+  const now = audioCtx.currentTime;
+
+  notes.forEach((freq, i) => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(freq, now + i * 0.06);
+
+    gain.gain.setValueAtTime(0.0001, now + i * 0.06);
+    gain.gain.exponentialRampToValueAtTime(0.04, now + i * 0.06 + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.06 + 0.18);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(now + i * 0.06);
+    osc.stop(now + i * 0.06 + 0.2);
+  });
+}
+
+function renderTarget() {
+  const typed = hiddenInput.value;
+  const frag = document.createDocumentFragment();
+
+  for (let i = 0; i < text.length; i++) {
+    const span = document.createElement("span");
+    span.className = "char";
+
+    if (text[i] === "\n") {
+      span.textContent = "\n";
+    } else {
+      span.textContent = text[i];
+    }
+
+    if (i < typed.length) {
+      if (typed[i] === text[i]) {
+        span.classList.add("done");
+      } else {
+        span.classList.add("error");
+      }
+    } else if (i === typed.length && !finished) {
+      span.classList.add("current");
+    }
+
+    frag.appendChild(span);
+  }
+
+  targetDiv.innerHTML = "";
+  targetDiv.appendChild(frag);
+}
+
+function startTimer() {
+  timerInterval = setInterval(() => {
+    if (startTime && !finished) {
+      const elapsed = (Date.now() - startTime) / 1000;
+      timeEl.textContent = elapsed.toFixed(2);
+    }
+  }, 50);
+}
+
+function updateStats() {
+  const typed = hiddenInput.value;
+  const accuracy = totalKeyStrokes === 0 ? 100 : (correctKeyStrokes / totalKeyStrokes) * 100;
+  const progress = Math.min((typed.length / text.length) * 100, 100);
+
+  accuracyEl.textContent = accuracy.toFixed(2);
+  progressText.textContent = Math.floor(progress);
+  typedCount.textContent = typed.length;
+  progressFill.style.width = progress + "%";
+}
+
+function flashError() {
+  mainCard.classList.remove("shake");
+  void mainCard.offsetWidth;
+  mainCard.classList.add("shake");
+}
+
+function checkFinish() {
+  if (hiddenInput.value === text && !finished) {
+    finished = true;
+    clearInterval(timerInterval);
+    playClearSound();
+
+    const finalTime = ((Date.now() - startTime) / 1000).toFixed(2);
+    const finalAccuracy = (totalKeyStrokes === 0 ? 100 : (correctKeyStrokes / totalKeyStrokes) * 100).toFixed(2);
+
+    result.textContent = `CLEAR! ⭑ Time: ${finalTime}s | Accuracy: ${finalAccuracy}%`;
+    mainCard.classList.remove("clear");
+    void mainCard.offsetWidth;
+    mainCard.classList.add("clear");
+  }
+}
+
+function handleInput() {
+  if (!startTime) {
+    startTime = Date.now();
+    startTimer();
+  }
+
+  const typed = hiddenInput.value;
+  const currentLength = typed.length;
+
+  if (currentLength > lastInputLength) {
+    const newCharIndex = currentLength - 1;
+    totalKeyStrokes++;
+
+    if (typed[newCharIndex] === text[newCharIndex]) {
+      correctKeyStrokes++;
+      playTypeSound();
+    } else {
+      playErrorSound();
+      flashError();
+    }
+  }
+
+  lastInputLength = currentLength;
+
+  renderTarget();
+  updateStats();
+  checkFinish();
+}
+
+function focusInput() {
+  initAudio();
+  hiddenInput.focus();
+}
+
+function resetGame() {
+  clearInterval(timerInterval);
+  startTime = null;
+  timerInterval = null;
+  finished = false;
+  totalKeyStrokes = 0;
+  correctKeyStrokes = 0;
+  lastInputLength = 0;
+  hiddenInput.value = "";
+  timeEl.textContent = "0.00";
+  accuracyEl.textContent = "100.00";
+  progressText.textContent = "0";
+  typedCount.textContent = "0";
+  progressFill.style.width = "0%";
+  result.textContent = "";
+  renderTarget();
+  focusInput();
+}
+
+hiddenInput.addEventListener("input", handleInput);
+
+focusBtn.addEventListener("click", focusInput);
+resetBtn.addEventListener("click", resetGame);
+targetDiv.addEventListener("click", focusInput);
+mainCard.addEventListener("click", (e) => {
+  if (e.target.tagName !== "BUTTON") focusInput();
+});
+
+window.addEventListener("keydown", (e) => {
+  if (e.key.length === 1 || e.key === "Backspace" || e.key === "Enter" || e.key === "Tab") {
+    focusInput();
+  }
+});
+
+window.addEventListener("load", () => {
+  renderTarget();
+});
+</script>
+</body>
+</html>
