@@ -145,6 +145,28 @@
   .char.done { color:var(--good); text-shadow:0 0 8px rgba(124,255,178,.26); }
   .char.current { color:white; background:rgba(255,209,102,.22); box-shadow:0 0 0 1px rgba(255,209,102,.33); }
   .char.error { color:var(--bad); background:rgba(255,123,145,.14); box-shadow:0 0 0 1px rgba(255,123,145,.30); }
+  .jp-translation {
+    display:block;
+    margin-top:12px;
+    padding-top:10px;
+    border-top:1px solid rgba(255,255,255,.09);
+    color:#dbe6ff;
+    font-size:14px;
+    line-height:1.6;
+    opacity:.88;
+  }
+  .jp-translation.word-jp {
+    color:#ffe082;
+    font-size:18px;
+    font-weight:800;
+  }
+  .chip .jp-chip {
+    display:block;
+    color:#b9c8f4;
+    font-size:11px;
+    margin-top:2px;
+  }
+
   .mini-progress { margin-top:12px; }
   .mini-top { display:flex; justify-content:space-between; margin-bottom:6px; color:#d7e3ff; font-size:14px; }
   .bar { height:16px; background:rgba(255,255,255,.1); border-radius:999px; overflow:hidden; border:1px solid rgba(255,255,255,.1); }
@@ -198,14 +220,14 @@
     <p>Type fast, strike clean, and defeat hidden bosses.</p>
   </div>
   <div class="mode-bar">
-    <button class="mode-btn active" data-dataset="essayTemplate">Essay Template</button>
-    <button class="mode-btn" data-dataset="versatileShorts">Versatile Shorts</button>
-    <button class="mode-btn" data-dataset="wordSet">Word</button>
+    <button class="mode-btn active" data-dataset="essayTemplate">エッセイテンプレ</button>
+    <button class="mode-btn" data-dataset="versatileShorts">Versatile表現</button>
+    <button class="mode-btn" data-dataset="wordSet">英単語</button>
   </div>
   <div class="mode-bar">
-    <button class="mode-btn active" data-mode="timeAttack">Time Attack</button>
-    <button class="mode-btn" data-mode="endless">Endless Practice</button>
-    <button class="mode-btn" data-mode="battle">Battle Mode</button>
+    <button class="mode-btn active" data-mode="timeAttack">タイムアタック</button>
+    <button class="mode-btn" data-mode="endless">無限練習</button>
+    <button class="mode-btn" data-mode="battle">バトルモード</button>
   </div>
   <div class="hud">
     <div class="stat"><div class="stat-label">Mode</div><div class="stat-value" id="modeLabel">Essay Template / Time Attack</div></div>
@@ -263,12 +285,12 @@ const ASSET_DIR = "assets";
 const IMAGE_EXTS = ["png", "webp", "jpg", "jpeg"];
 
 const datasets = {
-  essayTemplate:{label:"Essay Template",text:`The importance of social media which was always debatable has now become more controversial, with many people claiming that it is beneficial while others reject this notion. The substantial influence of this trend has sparked controversy over its potential impact in recent years. In my opinion, the former proposition appears to be more rational. This essay will further elaborate my views in favor of the positive impact and thus, will lead to a logical conclusion.
+  essayTemplate:{label:"エッセイテンプレ",text:`The importance of social media which was always debatable has now become more controversial, with many people claiming that it is beneficial while others reject this notion. The substantial influence of this trend has sparked controversy over its potential impact in recent years. In my opinion, the former proposition appears to be more rational. This essay will further elaborate my views in favor of the positive impact and thus, will lead to a logical conclusion.
 
 Analyzing the statement and explaining further, the first and foremost reason behind this is that social media enables people to communicate instantly across long distances. Another striking benefit in this regard is that it provides quick access to a wide range of information and news. Categorically discussing, it cannot be ignored that the main reason behind this is that it connects people and spreads information more efficiently than traditional methods.
 
 Probing ahead, one of the main underlying reasons stems from the fact that social media can lead to excessive use and addiction among users. Moving further, it is pertinent to mention that it sometimes spreads misinformation that can negatively affect society. Moreover, people may experience mental stress due to constant comparison with others online. Apart from the reasons mentioned above, it can be clearly stated why many are against this trend.`},
-  versatileShorts:{label:"Versatile Shorts",text:`The line graph shows the number of students who studied abroad between 2000 and 2020.
+  versatileShorts:{label:"Versatile表現",text:`The line graph shows the number of students who studied abroad between 2000 and 2020.
 Overall, the number increased significantly over the period.
 It rose steadily from 10,000 in 2000 to 30,000 in 2010.
 After that, it climbed sharply to reach a peak of 50,000 in 2020.
@@ -311,13 +333,13 @@ Overall, the park has become more modern and accessible.
 A new playground has been added in the center.
 In addition, a walking path has been built around the park.
 Some trees have been removed to make space for new facilities.`},
-  wordSet:{label:"Word",text:`controversial beneficial reject notion substantial influence potential impact rational elaborate positive logical conclusion analyzing statement foremost enables communicate instantly distances striking benefit access information categorically efficiently traditional methods probing underlying excessive addiction misinformation society mental stress comparison proportion accounted followed represented illustrates gradually sharply steadily declined significant development constructed replaced unchanged accessible facilities recycling collection transported sorted processed packaged delivered`}
+  wordSet:{label:"英単語",text:`controversial beneficial reject notion substantial influence potential impact rational elaborate positive logical conclusion analyzing statement foremost enables communicate instantly distances striking benefit access information categorically efficiently traditional methods probing underlying excessive addiction misinformation society mental stress comparison proportion accounted followed represented illustrates gradually sharply steadily declined significant development constructed replaced unchanged accessible facilities recycling collection transported sorted processed packaged delivered`}
 };
 
 const modeConfigs={
-  timeAttack:{label:"Time Attack",timeLimit:60,title:"Short Segment",hint:"Clear chunks fast.",description:"Short chunks appear one by one. Clear as many as possible before time hits zero."},
-  endless:{label:"Endless Practice",timeLimit:null,title:"Practice Segment",hint:"No timer. Just keep moving.",description:"A relaxed conveyor belt. Keep typing through the material in bite-sized pieces."},
-  battle:{label:"Battle Mode",timeLimit:null,title:"Boss Battle",hint:"Battle uses Word only. Press Start Battle and defeat the boss before time runs out.",description:"Battle uses only words. Future enemies are hidden. Speed and accuracy decide your damage."}
+  timeAttack:{label:"タイムアタック",timeLimit:60,title:"短文チャレンジ",hint:"制限時間内にできるだけ多く打ち切ろう。",description:"短い英文が1つずつ出ます。時間切れまでにできるだけ多くクリアするモードです。"},
+  endless:{label:"無限練習",timeLimit:null,title:"練習セグメント",hint:"時間制限なし。落ち着いて続けよう。",description:"時間制限なしで、教材を短いかたまりごとに練習できます。"},
+  battle:{label:"バトルモード",timeLimit:null,title:"ボスバトル",hint:"英単語・表現で戦います。Start Battleを押して、時間内にボスを倒そう。",description:"英単語やIELTS表現で攻撃します。速さと正確さでダメージが変わります。"}
 };
 const battleStages=[
   // ★高難度設定。Stage2のJeffから普通に苦戦するバランス。
@@ -366,6 +388,256 @@ const stage4Sentences = [
   "this comparison highlights an important difference","the overall pattern is easy to identify","the result was a steady improvement in efficiency","this may explain why the figure increased rapidly","another possible explanation is changing social attitudes",
   "this example shows how habits can change over time","it is necessary to balance convenience and safety","this issue is becoming increasingly important today","careful planning is required to solve this problem","the conclusion should be based on clear evidence"
 ];
+const japaneseTranslations = {
+  "controversial": "議論を呼ぶ、賛否が分かれる",
+  "beneficial": "有益な",
+  "reject": "拒否する、否定する",
+  "notion": "考え、概念",
+  "substantial": "かなりの、実質的な",
+  "influence": "影響",
+  "potential": "潜在的な、可能性のある",
+  "impact": "影響、衝撃",
+  "rational": "合理的な",
+  "elaborate": "詳しく述べる",
+  "positive": "肯定的な、前向きな",
+  "logical": "論理的な",
+  "conclusion": "結論",
+  "analyzing": "分析すること",
+  "statement": "主張、記述",
+  "foremost": "最も重要な、第一の",
+  "enables": "可能にする",
+  "communicate": "意思疎通する",
+  "instantly": "即座に",
+  "distances": "距離、遠隔地",
+  "striking": "目立った、印象的な",
+  "benefit": "利点、利益",
+  "access": "アクセス、利用する機会",
+  "information": "情報",
+  "categorically": "明確に、断定的に",
+  "efficiently": "効率的に",
+  "traditional": "伝統的な、従来の",
+  "methods": "方法",
+  "probing": "さらに探ること、詳しく調べること",
+  "underlying": "根本的な、背後にある",
+  "excessive": "過度の",
+  "addiction": "依存、中毒",
+  "misinformation": "誤情報",
+  "society": "社会",
+  "mental": "精神的な",
+  "stress": "ストレス、負担",
+  "comparison": "比較",
+  "proportion": "割合",
+  "accounted": "占めた、説明した",
+  "followed": "続いた、次に来た",
+  "represented": "表した、占めた",
+  "illustrates": "示す、説明する",
+  "gradually": "徐々に",
+  "sharply": "急激に",
+  "steadily": "着実に",
+  "declined": "減少した",
+  "significant": "重要な、大幅な",
+  "development": "発展、開発",
+  "constructed": "建設された",
+  "replaced": "置き換えられた",
+  "unchanged": "変化していない",
+  "accessible": "利用しやすい、アクセスしやすい",
+  "facilities": "施設",
+  "recycling": "リサイクル",
+  "collection": "収集",
+  "transported": "輸送された",
+  "sorted": "分類された",
+  "processed": "加工された、処理された",
+  "packaged": "包装された",
+  "delivered": "届けられた、配送された",
+  "the line graph shows the number of students who studied abroad between 2000 and 2020.": "折れ線グラフは、2000年から2020年の間に留学した学生数を示している。",
+  "overall, the number increased significantly over the period.": "全体として、その数は期間中に大きく増加した。",
+  "it rose steadily from 10,000 in 2000 to 30,000 in 2010.": "それは2000年の1万人から2010年の3万人へ着実に増加した。",
+  "after that, it climbed sharply to reach a peak of 50,000 in 2020.": "その後、2020年に5万人のピークに達するまで急上昇した。",
+  "the graph illustrates the changes in car ownership over a 20-year period.": "グラフは20年間の自動車保有率の変化を示している。",
+  "overall, there was a clear upward trend.": "全体として、明確な上昇傾向があった。",
+  "the figure increased gradually from 20% to 40% between 2000 and 2010.": "数値は2000年から2010年の間に20%から40%へ徐々に増加した。",
+  "in contrast, the number of people using public transport declined during the same period.": "対照的に、同じ期間に公共交通機関を利用する人の数は減少した。",
+  "the pie chart shows the proportion of energy sources used in a country.": "円グラフは、ある国で使われているエネルギー源の割合を示している。",
+  "overall, fossil fuels accounted for the largest share.": "全体として、化石燃料が最も大きな割合を占めた。",
+  "coal made up 40% of the total, followed by oil at 30%.": "石炭が全体の40%を占め、次いで石油が30%だった。",
+  "in contrast, renewable energy represented only 10%.": "対照的に、再生可能エネルギーはわずか10%だった。",
+  "the chart illustrates how people spend their free time.": "図表は人々が余暇をどのように過ごすかを示している。",
+  "overall, watching TV was the most popular activity.": "全体として、テレビを見ることが最も人気のある活動だった。",
+  "it accounted for 35% of the total, while reading made up only 15%.": "それは全体の35%を占めた一方、読書はわずか15%だった。",
+  "sports and social activities had similar proportions.": "スポーツと社交活動は似た割合だった。",
+  "the diagram shows the process of recycling plastic bottles.": "図はペットボトルをリサイクルする過程を示している。",
+  "overall, the process consists of several stages, beginning with collection and ending with reuse.": "全体として、その過程はいくつかの段階から成り、収集に始まり再利用で終わる。",
+  "first, used bottles are collected and transported to a recycling center.": "まず、使用済みのボトルが集められ、リサイクルセンターへ運ばれる。",
+  "next, they are sorted and cleaned.": "次に、それらは分類され、洗浄される。",
+  "finally, the plastic is processed into new products.": "最後に、プラスチックは新しい製品へ加工される。",
+  "the diagram illustrates how coffee is produced.": "図はコーヒーがどのように生産されるかを示している。",
+  "overall, it is a linear process with multiple stages.": "全体として、それは複数の段階を持つ直線的な過程である。",
+  "the process begins with harvesting coffee beans.": "その過程はコーヒー豆の収穫から始まる。",
+  "after that, the beans are dried and roasted.": "その後、豆は乾燥され、焙煎される。",
+  "finally, they are packaged and delivered to stores.": "最後に、それらは包装され、店へ配送される。",
+  "the maps show the changes in a town between 1990 and 2020.": "地図は1990年から2020年の間の町の変化を示している。",
+  "overall, the area has undergone significant development.": "全体として、その地域は大きく発展した。",
+  "several new buildings have been constructed.": "いくつかの新しい建物が建設された。",
+  "the farmland has been replaced by residential areas.": "農地は住宅地に置き換えられた。",
+  "however, the river has remained unchanged.": "しかし、川は変わらず残っている。",
+  "the maps illustrate how a park has changed over time.": "地図は公園が時間とともにどのように変化したかを示している。",
+  "overall, the park has become more modern and accessible.": "全体として、公園はより近代的で利用しやすくなった。",
+  "a new playground has been added in the center.": "中央に新しい遊び場が追加された。",
+  "in addition, a walking path has been built around the park.": "さらに、公園の周囲に散歩道が作られた。",
+  "some trees have been removed to make space for new facilities.": "新しい施設のためのスペースを作るため、一部の木が取り除かれた。",
+  "account for": "説明する、割合を占める",
+  "level off": "横ばいになる",
+  "rise sharply": "急激に上昇する",
+  "fall gradually": "徐々に下がる",
+  "increase steadily": "着実に増加する",
+  "decline rapidly": "急速に減少する",
+  "reach a peak": "ピークに達する",
+  "drop significantly": "大幅に下落する",
+  "remain stable": "安定したままである",
+  "fluctuate slightly": "わずかに変動する",
+  "grow rapidly": "急速に成長する",
+  "decrease steadily": "着実に減少する",
+  "stay constant": "一定のままである",
+  "show a trend": "傾向を示す",
+  "lead to": "につながる",
+  "result in": "という結果になる",
+  "focus on": "に焦点を当てる",
+  "depend on": "に依存する、次第である",
+  "rely on": "に頼る",
+  "compare with": "と比較する",
+  "differ from": "と異なる",
+  "similar to": "に似ている",
+  "based on": "に基づいて",
+  "according to": "によると",
+  "in terms": "の観点で",
+  "as a result": "結果として",
+  "due to": "が原因で",
+  "such as": "のような",
+  "for example": "例えば",
+  "for instance": "例えば",
+  "on average": "平均して",
+  "in general": "一般的に",
+  "at least": "少なくとも",
+  "at most": "多くとも",
+  "in total": "合計で",
+  "per year": "1年あたり",
+  "over time": "時間とともに",
+  "by contrast": "対照的に",
+  "in addition": "さらに",
+  "on the other hand": "一方で",
+  "as well": "同様に、もまた",
+  "even though": "たとえ～でも",
+  "rather than": "ではなく",
+  "instead of": "の代わりに",
+  "in fact": "実際には",
+  "at first": "最初は",
+  "in the end": "最終的に",
+  "in detail": "詳しく",
+  "make up": "占める、構成する",
+  "be responsible for": "に責任がある、の原因である",
+  "this topic is controversial": "この話題は賛否が分かれる",
+  "the number increased rapidly": "その数は急速に増加した",
+  "there was a significant rise": "大幅な増加があった",
+  "it remained relatively stable": "それは比較的安定していた",
+  "the figure declined gradually": "その数値は徐々に減少した",
+  "a sharp increase was observed": "急激な増加が見られた",
+  "there was a slight decrease": "わずかな減少があった",
+  "the trend is upward": "傾向は上向きである",
+  "it reached its peak": "それはピークに達した",
+  "the data shows a decline": "データは減少を示している",
+  "it is widely believed that": "～だと広く信じられている",
+  "many people tend to think": "多くの人は～と考えがちである",
+  "it can be clearly seen": "はっきりと見ることができる",
+  "one possible reason is": "考えられる理由の一つは",
+  "this may lead to problems": "これは問題につながる可能性がある",
+  "there is a growing concern": "懸念が高まっている",
+  "it plays a key role": "それは重要な役割を果たす",
+  "this has a negative impact": "これは悪影響を与える",
+  "it is worth noting that": "～は注目に値する",
+  "this suggests that": "これは～を示唆している",
+  "the proportion increased significantly": "割合は大きく増加した",
+  "the number rose dramatically": "その数は劇的に増えた",
+  "it experienced a sharp fall": "それは急激な低下を経験した",
+  "the figure remained unchanged": "数値は変化しなかった",
+  "this trend continued steadily": "この傾向は着実に続いた",
+  "it fluctuated over time": "それは時間とともに変動した",
+  "there was a gradual rise": "徐々に増加した",
+  "it showed a downward trend": "それは下降傾向を示した",
+  "this indicates a change": "これは変化を示している",
+  "it became more common": "それはより一般的になった",
+  "this is mainly because": "これは主に～だからである",
+  "another important factor is": "もう一つの重要な要因は",
+  "this can be explained by": "これは～によって説明できる",
+  "it depends on various factors": "それはさまざまな要因に左右される",
+  "this is due to": "これは～が原因である",
+  "it is influenced by": "それは～の影響を受けている",
+  "this leads to": "これは～につながる",
+  "it results in": "それは～という結果を生む",
+  "this causes problems": "これは問題を引き起こす",
+  "it creates opportunities": "それは機会を生み出す",
+  "the number remained stable": "その数は安定していた",
+  "the figure increased steadily": "数値は着実に増加した",
+  "the percentage fell slightly": "割合はわずかに下がった",
+  "the chart compares two groups": "図表は2つの集団を比較している",
+  "the graph shows clear differences": "グラフは明確な違いを示している",
+  "the process begins with collection": "その過程は収集から始まる",
+  "the diagram illustrates the process": "図はその過程を示している",
+  "the maps show major changes": "地図は大きな変化を示している",
+  "overall there was growth": "全体として成長があった",
+  "this pattern is noticeable": "このパターンは目立っている",
+  "there are several reasons for this trend": "この傾向にはいくつかの理由がある",
+  "one of the main causes is economic growth": "主な原因の一つは経済成長である",
+  "this phenomenon can be explained by social factors": "この現象は社会的要因によって説明できる",
+  "it is important to consider the impact on society": "社会への影響を考えることが重要である",
+  "this issue has attracted significant attention": "この問題は大きな注目を集めている",
+  "there has been a noticeable increase in demand": "需要に目立った増加があった",
+  "this has led to changes in behavior": "これは行動の変化につながった",
+  "many people are concerned about the effects": "多くの人がその影響を懸念している",
+  "this trend is expected to continue in the future": "この傾向は今後も続くと予想される",
+  "it is likely to have long term consequences": "それは長期的な結果をもたらす可能性が高い",
+  "the most important factor is access to information": "最も重要な要因は情報へのアクセスである",
+  "this can have both positive and negative effects": "これは良い影響と悪い影響の両方を持ちうる",
+  "it is difficult to ignore the influence of technology": "技術の影響を無視することは難しい",
+  "this argument seems reasonable for several reasons": "この主張はいくつかの理由で妥当に思える",
+  "the benefits may outweigh the drawbacks in many cases": "多くの場合、利点が欠点を上回る可能性がある",
+  "this issue should be examined from different perspectives": "この問題は異なる視点から検討されるべきである",
+  "the evidence suggests that the situation is changing": "証拠は状況が変化していることを示している",
+  "this development may create new opportunities for young people": "この発展は若者に新しい機会を生む可能性がある",
+  "the main disadvantage is the risk of overdependence": "主な欠点は過度な依存のリスクである",
+  "this problem is closely related to social inequality": "この問題は社会的不平等と密接に関係している",
+  "a possible solution is to improve public education": "考えられる解決策は公教育を改善することである",
+  "governments should take practical measures to address this problem": "政府はこの問題に対処するため実践的な対策を取るべきである",
+  "companies also have a responsibility to protect consumers": "企業にも消費者を守る責任がある",
+  "individuals need to make informed decisions in daily life": "個人は日常生活で十分な情報に基づいた判断をする必要がある",
+  "this change may benefit society as a whole": "この変化は社会全体に利益をもたらす可能性がある",
+  "however it may also create serious challenges": "しかし、それは深刻な課題を生む可能性もある",
+  "the data clearly shows a gradual upward trend": "データは緩やかな上昇傾向を明確に示している",
+  "the figure reached its highest point at the end": "数値は最後に最高点に達した",
+  "there was a sharp decline during the same period": "同じ期間に急激な減少があった",
+  "the proportion of renewable energy remained relatively low": "再生可能エネルギーの割合は比較的低いままだった",
+  "public transport became less popular over time": "公共交通機関は時間とともに人気が下がった",
+  "the number of students studying abroad increased significantly": "留学する学生数は大幅に増加した",
+  "the process consists of several important stages": "その過程はいくつかの重要な段階から成る",
+  "the first stage involves collecting used materials": "第一段階では使用済みの材料を集める",
+  "after that the materials are cleaned and sorted": "その後、材料は洗浄され分類される",
+  "finally they are processed into new products": "最後に、それらは新しい製品へ加工される",
+  "the town has undergone considerable development since 1990": "その町は1990年以降かなり発展した",
+  "residential areas have replaced the former farmland": "住宅地が以前の農地に取って代わった",
+  "several new facilities have been added to the park": "公園にいくつかの新しい施設が追加された",
+  "some natural areas have remained unchanged": "一部の自然区域は変わらず残っている",
+  "this comparison highlights an important difference": "この比較は重要な違いを際立たせている",
+  "the overall pattern is easy to identify": "全体的なパターンは見つけやすい",
+  "the result was a steady improvement in efficiency": "結果として効率が着実に改善した",
+  "this may explain why the figure increased rapidly": "これは数値が急速に増加した理由を説明するかもしれない",
+  "another possible explanation is changing social attitudes": "もう一つの考えられる説明は社会的態度の変化である",
+  "this example shows how habits can change over time": "この例は習慣が時間とともにどう変わるかを示している",
+  "it is necessary to balance convenience and safety": "利便性と安全性のバランスを取る必要がある",
+  "this issue is becoming increasingly important today": "この問題は今日ますます重要になっている",
+  "careful planning is required to solve this problem": "この問題を解決するには慎重な計画が必要である",
+  "the conclusion should be based on clear evidence": "結論は明確な証拠に基づくべきである"
+};
+function normalizePromptKey(text){return String(text||"").toLowerCase().replace(/\s+/g," ").trim()}
+function getJapaneseTranslation(text){return japaneseTranslations[normalizePromptKey(text)]||""}
 const imageNameAliases={stand1:["stand1","立ち絵1"],stand2:["stand2","立ち絵2"],damage1:["damage1","damage"],defeated:["defeated","defieated","敗北"],taunt:["taunt","煽り"]};
 const $=id=>document.getElementById(id);
 const promptBox=$("promptBox"),hiddenInput=$("hiddenInput"),modeLabel=$("modeLabel"),timeValue=$("timeValue"),accuracyValue=$("accuracyValue"),clearedValue=$("clearedValue"),scoreValue=$("scoreValue"),bestValue=$("bestValue"),progressText=$("progressText"),progressFill=$("progressFill"),progressLabel=$("progressLabel"),resultText=$("resultText"),queueList=$("queueList"),rankingList=$("rankingList"),mainCard=$("mainCard"),sectionTitle=$("sectionTitle"),hintText=$("hintText"),modeDescription=$("modeDescription"),playerNameInput=$("playerNameInput"),saveScoreBtn=$("saveScoreBtn"),saveStatus=$("saveStatus"),battleArena=$("battleArena"),battleStartBtn=$("battleStartBtn"),focusBtn=$("focusBtn"),resetBtn=$("resetBtn"),skipBtn=$("skipBtn"),queueTitle=$("queueTitle"),countdownOverlay=$("countdownOverlay"),enemyHpFill=$("enemyHpFill"),enemyHpText=$("enemyHpText"),enemyNameLabel=$("enemyNameLabel"),enemySpriteLabel=$("enemySpriteLabel"),enemySpriteWrap=$("enemySpriteWrap"),battleTimeText=$("battleTimeText"),battleTimeFill=$("battleTimeFill"),enemyImage=$("enemyImage"),enemyFallback=$("enemyFallback");
@@ -398,14 +670,14 @@ function stopIdleAnimation(){if(state.idleTimer){clearInterval(state.idleTimer);
 function buildQueueForMode(mode){if(mode==="battle")return[];return shuffle([...currentSegments()])}
 function setDataset(key){currentDatasetKey=key;currentDataset=datasets[key];datasetButtons.forEach(b=>b.classList.toggle("active",b.dataset.dataset===key));resetMode();loadRanking()}
 function setMode(mode){state.mode=mode;if(mode==="battle"){currentDatasetKey="wordSet";currentDataset=datasets.wordSet;datasetButtons.forEach(b=>b.classList.toggle("active",b.dataset.dataset==="wordSet"))}modeButtons.forEach(b=>b.classList.toggle("active",b.dataset.mode===mode));resetMode();loadRanking()}
-function applyModeUI(){const c=modeConfigs[state.mode],material=state.mode==="battle"?"Battle / Word":currentDataset.label;modeLabel.textContent=`${material} / ${c.label}`;sectionTitle.textContent=`${c.title} · ${material}`;hintText.textContent=c.hint;modeDescription.textContent=`${c.description} Ranking key: ${getScoreMode()}`;progressLabel.textContent=currentDatasetKey==="wordSet"?"Word Progress":state.mode==="battle"?"Attack Charge":"Segment Progress";battleArena.style.display=state.mode==="battle"?"block":"none";battleStartBtn.style.display=state.mode==="battle"?"inline-block":"none";focusBtn.style.display=state.mode==="battle"?"none":"inline-block";skipBtn.style.display=state.mode==="battle"?"none":"inline-block";queueTitle.textContent=state.mode==="battle"?"Stages":"Queue"}
+function applyModeUI(){const c=modeConfigs[state.mode],material=state.mode==="battle"?"バトル / 英単語":currentDataset.label;modeLabel.textContent=`${material} / ${c.label}`;sectionTitle.textContent=`${c.title} · ${material}`;hintText.textContent=c.hint;modeDescription.textContent=`${c.description} Ranking key: ${getScoreMode()}`;progressLabel.textContent=currentDatasetKey==="wordSet"?"単語進捗":state.mode==="battle"?"攻撃チャージ":"セグメント進捗";battleArena.style.display=state.mode==="battle"?"block":"none";battleStartBtn.style.display=state.mode==="battle"?"inline-block":"none";focusBtn.style.display=state.mode==="battle"?"none":"inline-block";skipBtn.style.display=state.mode==="battle"?"none":"inline-block";queueTitle.textContent=state.mode==="battle"?"ステージ":"キュー"}
 function updateHud(){timeValue.textContent=(state.mode==="timeAttack"||state.mode==="battle"?state.timeLeft:state.elapsed).toFixed(1);accuracyValue.textContent=getAccuracy().toFixed(1);clearedValue.textContent=state.cleared;scoreValue.textContent=state.score}
-function renderQueue(){queueList.innerHTML="";if(state.mode==="battle"){battleStages.forEach((st,i)=>{const d=document.createElement("div");let label=`Stage ${i+1}: ???`;if(i<state.battleStageIndex)label=`Stage ${i+1}: Cleared`;if(i===state.battleStageIndex&&(state.battleActive||state.finished))label=`Stage ${i+1}: ${st.name}`;d.className="chip"+(i===state.battleStageIndex?" current-word":"")+(i<state.battleStageIndex?" cleared-stage":"");d.textContent=label;queueList.appendChild(d)});return}const upcoming=[state.currentPrompt,...state.queue.slice(0,6)].filter(Boolean);if(!upcoming.length){queueList.innerHTML='<div class="chip">Queue empty. Reset or switch mode.</div>';return}upcoming.forEach((it,i)=>{const d=document.createElement("div");d.className="chip"+(i===0?" current-word":"");d.textContent=i===0?"▶ "+it:it;queueList.appendChild(d)})}
-function renderPrompt(){const typed=state.typedBuffer,prompt=state.currentPrompt||"";promptBox.innerHTML="";const frag=document.createDocumentFragment();for(let i=0;i<prompt.length;i++){const span=document.createElement("span");span.className="char";span.textContent=prompt[i];if(i<typed.length)span.classList.add("done");else if(i===typed.length&&!state.finished)span.classList.add("current");frag.appendChild(span)}promptBox.appendChild(frag);const progress=prompt.length===0?0:Math.min(typed.length/prompt.length*100,100);progressText.textContent=Math.floor(progress);progressFill.style.width=progress+"%"}
+function renderQueue(){queueList.innerHTML="";if(state.mode==="battle"){battleStages.forEach((st,i)=>{const d=document.createElement("div");let label=`Stage ${i+1}: ???`;if(i<state.battleStageIndex)label=`Stage ${i+1}: Cleared`;if(i===state.battleStageIndex&&(state.battleActive||state.finished))label=`Stage ${i+1}: ${st.name}`;d.className="chip"+(i===state.battleStageIndex?" current-word":"")+(i<state.battleStageIndex?" cleared-stage":"");d.textContent=label;queueList.appendChild(d)});return}const upcoming=[state.currentPrompt,...state.queue.slice(0,6)].filter(Boolean);if(!upcoming.length){queueList.innerHTML='<div class="chip">キューは空です。リセットするかモードを切り替えてください。</div>';return}upcoming.forEach((it,i)=>{const d=document.createElement("div");d.className="chip"+(i===0?" current-word":"");const main=document.createElement("span");main.textContent=i===0?"▶ "+it:it;d.appendChild(main);const jp=getJapaneseTranslation(it);if(jp){const small=document.createElement("span");small.className="jp-chip";small.textContent=jp;d.appendChild(small)}queueList.appendChild(d)})}
+function renderPrompt(){const typed=state.typedBuffer,prompt=state.currentPrompt||"";promptBox.innerHTML="";const frag=document.createDocumentFragment();for(let i=0;i<prompt.length;i++){const span=document.createElement("span");span.className="char";span.textContent=prompt[i];if(i<typed.length)span.classList.add("done");else if(i===typed.length&&!state.finished)span.classList.add("current");frag.appendChild(span)}promptBox.appendChild(frag);const jp=getJapaneseTranslation(prompt);if(jp){const div=document.createElement("div");div.className="jp-translation"+(currentDatasetKey==="wordSet"||state.mode==="battle"?" word-jp":"");div.textContent=jp;promptBox.appendChild(div)}const progress=prompt.length===0?0:Math.min(typed.length/prompt.length*100,100);progressText.textContent=Math.floor(progress);progressFill.style.width=progress+"%"}
 function focusInput(){initAudio();hiddenInput.focus()}function showImmediateError(){const spans=promptBox.querySelectorAll(".char"),idx=state.typedBuffer.length,span=spans[idx];if(!span)return;span.classList.remove("current");span.classList.add("error");setTimeout(()=>{span.classList.remove("error");if(idx===state.typedBuffer.length&&!state.finished)span.classList.add("current")},120)}function flashError(){mainCard.classList.remove("shake");void mainCard.offsetWidth;mainCard.classList.add("shake")}function popCard(){mainCard.classList.remove("pop");void mainCard.offsetWidth;mainCard.classList.add("pop")}
 function startRunIfNeeded(){if(state.started||state.finished||state.mode==="battle")return;state.started=true;state.startStamp=performance.now();state.timerId=setInterval(()=>{if(state.finished)return;state.elapsed=(performance.now()-state.startStamp)/1000;if(state.mode==="timeAttack"){state.timeLeft=Math.max(0,modeConfigs.timeAttack.timeLimit-state.elapsed);if(state.timeLeft<=0)finishTimeAttack()}updateHud()},50)}
 function finishTimeAttack(){if(state.finished)return;state.finished=true;clearInterval(state.timerId);hiddenInput.blur();resultText.textContent=`TIME UP! Cleared ${state.cleared} chunk(s) | Score ${state.score} | Accuracy ${getAccuracy().toFixed(1)}%`;popCard()}
-function advancePrompt(skipped=false){const just=state.currentPrompt;if(!skipped){state.cleared++;state.combo++;state.maxCombo=Math.max(state.maxCombo,state.combo);state.score+=Math.max(10,Math.round(just.length*(getAccuracy()/100)));playClearSound()}else{state.combo=0;if(state.mode==="timeAttack")state.score=Math.max(0,state.score-5)}state.typedBuffer="";hiddenInput.value="";if(state.mode==="endless"&&state.queue.length<3)state.queue.push(...shuffle(currentSegments()));state.currentPrompt=state.queue.shift()||"";if(!state.currentPrompt){if(state.mode==="endless"){state.queue=shuffle(currentSegments());state.currentPrompt=state.queue.shift()||""}else{state.finished=true;clearInterval(state.timerId);resultText.textContent=`All chunks cleared! Score ${state.score} | Accuracy ${getAccuracy().toFixed(1)}%`;updateHud();renderQueue();renderPrompt();return}}resultText.textContent=skipped?"Skipped.":"Chunk cleared. Next one.";updateHud();renderQueue();renderPrompt();popCard()}
+function advancePrompt(skipped=false){const just=state.currentPrompt;if(!skipped){state.cleared++;state.combo++;state.maxCombo=Math.max(state.maxCombo,state.combo);state.score+=Math.max(10,Math.round(just.length*(getAccuracy()/100)));playClearSound()}else{state.combo=0;if(state.mode==="timeAttack")state.score=Math.max(0,state.score-5)}state.typedBuffer="";hiddenInput.value="";if(state.mode==="endless"&&state.queue.length<3)state.queue.push(...shuffle(currentSegments()));state.currentPrompt=state.queue.shift()||"";if(!state.currentPrompt){if(state.mode==="endless"){state.queue=shuffle(currentSegments());state.currentPrompt=state.queue.shift()||""}else{state.finished=true;clearInterval(state.timerId);resultText.textContent=`All chunks cleared! Score ${state.score} | Accuracy ${getAccuracy().toFixed(1)}%`;updateHud();renderQueue();renderPrompt();return}}resultText.textContent=skipped?"スキップしました。":"クリア！次へ。";updateHud();renderQueue();renderPrompt();popCard()}
 function setClassByThreshold(el, baseClasses){el.className=baseClasses}
 function flashBar(el){el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash")}
 function updateBattleBars(){
@@ -433,7 +705,7 @@ function battleHit(){const dmg=calcBattleDamage();state.enemyHp-=dmg;flashBar(en
 function nextBattlePrompt(){state.typedBuffer="";hiddenInput.value="";if(state.promptCycle.length<5)state.promptCycle.push(...shuffle(currentWords()));state.currentPrompt=state.promptCycle.shift()||"type";renderPrompt();renderQueue()}
 function winBattleStage(){state.battleActive=false;stopIdleAnimation();clearInterval(state.timerId);hiddenInput.blur();setEnemyImage("defeated");resultText.textContent=`${state.enemyName} defeated!`;state.battleStageIndex++;battleStartBtn.disabled=true;resetBtn.disabled=true;renderQueue();popCard();if(state.battleStageIndex>=battleStages.length){state.finished=true;resultText.textContent=`ALL CLEAR! Final Score ${state.score} | Accuracy ${getAccuracy().toFixed(1)}%`;battleStartBtn.disabled=true;resetBtn.disabled=false;return}setTimeout(()=>setupBattleStage(true),1200)}
 function loseBattle(msg){state.battleActive=false;state.finished=true;stopIdleAnimation();clearInterval(state.timerId);hiddenInput.blur();setEnemyImage("taunt");resultText.textContent=`${msg} Stage ${state.battleStageIndex+1} failed. Score ${state.score}`;battleStartBtn.disabled=true;updateBattleBars();popCard()}
-function resetMode(){clearInterval(state.timerId);stopIdleAnimation();const cfg=modeConfigs[state.mode];state.started=false;state.finished=false;state.battleActive=false;state.cleared=0;state.score=0;state.totalKeystrokes=0;state.correctKeystrokes=0;state.typedBuffer="";state.timeLeft=cfg.timeLimit??0;state.elapsed=0;state.startStamp=null;state.timerId=null;state.maxCombo=0;state.combo=0;hiddenInput.value="";saveStatus.textContent="Play first, then save your score.";applyModeUI();if(state.mode==="battle"){state.battleStageIndex=0;battleStartBtn.disabled=false;resetBtn.disabled=false;setupBattleStage()}else{state.queue=buildQueueForMode(state.mode);state.currentPrompt=state.queue.shift()||"";renderPrompt();renderQueue();updateHud();resultText.textContent=""}}
+function resetMode(){clearInterval(state.timerId);stopIdleAnimation();const cfg=modeConfigs[state.mode];state.started=false;state.finished=false;state.battleActive=false;state.cleared=0;state.score=0;state.totalKeystrokes=0;state.correctKeystrokes=0;state.typedBuffer="";state.timeLeft=cfg.timeLimit??0;state.elapsed=0;state.startStamp=null;state.timerId=null;state.maxCombo=0;state.combo=0;hiddenInput.value="";saveStatus.textContent="まずプレイしてからスコアを保存できます。";applyModeUI();if(state.mode==="battle"){state.battleStageIndex=0;battleStartBtn.disabled=false;resetBtn.disabled=false;setupBattleStage()}else{state.queue=buildQueueForMode(state.mode);state.currentPrompt=state.queue.shift()||"";renderPrompt();renderQueue();updateHud();resultText.textContent=""}}
 function handleKeyDown(e){if(state.mode==="battle"&&(!state.battleActive||state.finished))return;if(state.finished&&state.mode==="timeAttack")return;const controls=["Shift","Control","Alt","Meta","CapsLock","Escape","ArrowLeft","ArrowRight","ArrowUp","ArrowDown"];if(controls.includes(e.key))return;if(e.key==="Tab"){e.preventDefault();return}if(e.key==="Backspace"){e.preventDefault();if(state.typedBuffer.length>0){state.typedBuffer=state.typedBuffer.slice(0,-1);hiddenInput.value=state.typedBuffer;renderPrompt()}return}if(e.key.length!==1&&e.key!=="Enter")return;e.preventDefault();startRunIfNeeded();const expected=state.currentPrompt[state.typedBuffer.length],input=e.key==="Enter"?"\n":e.key;state.totalKeystrokes++;if(input===expected){state.correctKeystrokes++;state.typedBuffer+=input;hiddenInput.value=state.typedBuffer;playTypeSound();updateHud();renderPrompt();if(state.typedBuffer===state.currentPrompt){if(state.mode==="battle")battleHit();else advancePrompt(false)}}else{state.combo=0;playErrorSound();flashError();updateHud();showImmediateError()}}
 async function saveScore(){const name=playerNameInput.value.trim()||"anonymous";if(state.score<=0){saveStatus.textContent="Score is still 0. Play first.";return}saveScoreBtn.disabled=true;saveStatus.textContent="Saving...";const {error}=await supabaseClient.rpc("save_high_score",{p_player_name:name,p_score:state.score,p_max_combo:state.maxCombo||state.cleared,p_accuracy:Math.round(getAccuracy()),p_mode:getScoreMode()});saveScoreBtn.disabled=false;if(error){console.error(error);saveStatus.textContent="Save failed. Check Supabase RPC / RLS settings.";return}saveStatus.textContent=`Saved as ${name}.`;await loadRanking()}
 async function loadRanking(){rankingList.textContent="Loading...";bestValue.textContent="-";const {data,error}=await supabaseClient.from("scores").select("id, player_name, score, max_combo, accuracy, mode").eq("mode",getScoreMode()).order("score",{ascending:false}).limit(20);if(error){console.error(error);rankingList.textContent="Ranking load failed.";return}if(!data||data.length===0){rankingList.textContent="No scores yet.";return}bestValue.textContent=data[0].score;rankingList.innerHTML=`<div class="ranking-row header"><div>#</div><div>Name</div><div>Score</div><div>Acc</div></div>${data.map((r,i)=>`<div class="ranking-row"><div>${i+1}</div><div>${escapeHtml(r.player_name||"anonymous")}</div><div>${r.score}</div><div>${Number(r.accuracy||0).toFixed(0)}%</div></div>`).join("")}`}
